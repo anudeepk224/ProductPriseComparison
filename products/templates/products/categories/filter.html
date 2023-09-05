@@ -1,0 +1,35 @@
+{% extends 'base_layout.html' %}
+{% load static %}
+
+
+{% block content %}
+
+  <title>{{category.name}}</title>
+  <h1>{{category.name}}</h1>
+  <h1>{{product.category}}</h1>
+  <link rel="stylesheet" href="{% static 'products/filtered-products.css' %}">
+  <div class="Products">
+
+    {% for product in product_query_set %}
+      <div class="product">
+        <img src="{{product.thumbnail.url}}" class="thumbnails">
+        <h5>{{product.name}}</h5>
+          <span class="Amazon">Amazon:</span>
+            <span class="product-price"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               Rs.{{product.price_amazon}}</span><br>
+          <span class="Flipkart">Flipkart:</span>
+            <span class="product-price"> &nbsp; Rs.{{product.price_flipkart}}</span><br>
+          <span class="Bigbasket">Bigbasket:</span>
+            <span class="product-price"> &nbsp;&nbsp;&nbsp;
+               Rs.{{product.price_bigbasket}}</span><br>
+        <br>
+        {% if user.is_authenticated %}
+          <form class="attibute-qty" action="{% url 'basket:update' product.slug %}" method="GET">
+            <span class="units-qty">Quantity: </span><input type="number" name="quantity" placeholder="1" min="1" max="8" oninput="this.value = Math.abs(this.value)">
+            <button type="submit" class="btn-add-to-basket"><span>Add to Basket</span></button>
+          </form>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}
